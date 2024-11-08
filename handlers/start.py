@@ -4,16 +4,28 @@
 # This code is licensed under the MIT License.
 # See LICENSE for details.
 
-from utils.loader import dp, db
+
+from aiogram import html
 from aiogram.filters.command import Command
 
+from utils.loader import dp, db
+from utils.logger import setup_logger
+
+
+logger = setup_logger(__name__)
 
 @dp.message(Command("start"))
 async def start(message):
 	# Send a welcome message to the user
-	await message.answer("<b>Hello!</b>")
+	logger.info(f"Add user: {message.from_user.id}")
 
-	# await add_user(message)
+	start_message = f"Hello {html.bold(html.quote(message.from_user.full_name))}"
+	await message.answer(start_message)
+
+	try:
+		await add_user(message)
+	except Exception as e:
+		logger.error("Error processing 'ADD USER': %s", e)
 
 
 async def add_user(message):

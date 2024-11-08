@@ -21,21 +21,19 @@ class UserDatabase:
 			first_name VARCHAR(255),
 			last_name VARCHAR(255),
 			username VARCHAR(255),
-			language VARCHAR(255) DEFAULT NULL,
-			news_time VARCHAR(255) DEFAULT NULL,
-			poem_time VARCHAR(255) DEFAULT NULL
+			sch_of_responsibilities VARCHAR(255),
+			sch_life_and_ministry VARCHAR(255)
 		)''')
 
 	async def add_user(self, user):
 		try:
-			self.cursor.execute("INSERT INTO users (chat_id, first_name, last_name, username, language, news_time, poem_time) VALUES (%s, %s, %s, %s, %s, %s, %s)", (
+			self.cursor.execute("INSERT INTO users (chat_id, first_name, last_name, username, sch_of_responsibilities, sch_life_and_ministry) VALUES (%s, %s, %s, %s, %s, %s)", (
 				user[0],
 				user[1],
 				user[2] or '',
 				user[3] or '',
 				user[4] or '',
-				user[5] or '',
-				user[6] or ''
+				user[5] or ''
 			))
 			self.connection.commit()
 		except psycopg2.errors.UniqueViolation:
@@ -51,9 +49,8 @@ class UserDatabase:
 				'first_name': result[1],
 				'last_name': result[2] or None,
 				'username': result[3] or None,
-				'language': result[4] or None,
-				'news_time': result[5] or None,
-				'poem_time': result[6] or None
+				'sch_of_responsibilities': result[4] or None,
+				'sch_life_and_ministry': result[5] or None
 			}
 
 	async def get_all_users(self):
@@ -64,9 +61,8 @@ class UserDatabase:
 			'first_name': result[1],
 			'last_name': result[2] or None,
 			'username': result[3] or None,
-			'language': result[4] or None,
-			'news_time': result[5] or None,
-			'poem_time': result[6] or None
+			'sch_of_responsibilities': result[4] or None,
+			'sch_life_and_ministry': result[5] or None
 		} for result in results]
 
 	async def close(self):
